@@ -2,26 +2,199 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fonts */
+  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
+  --font-outfit: 'Outfit', system-ui, sans-serif;
+
+  /* Brand colors */
+  --color-black:     #111111;
+  --color-gold:      #C9A035;
+  --color-gold-dim:  #A07C28;
+  --color-offwhite:  #F7F4EF;
+  --color-darkgray:  #2A2A2A;
+  --color-midgray:   #555555;
+  --color-lightgray: #E8E4DE;
+  --color-white:     #FFFFFF;
+
+  /* Spacing scale (4-base) */
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* Type scale */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+  --text-7xl:  4.5rem;
+  --text-8xl:  6rem;
+
+  /* Transitions */
+  --ease-default: 0.2s ease;
+  --ease-smooth:  0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─────────────────────────────────────────────
+   RESET
+───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-black);
+  color: var(--color-offwhite);
+  font-family: var(--font-outfit);
+  font-weight: 300;
+  font-size: var(--text-base);
+  line-height: 1.7;
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* ─────────────────────────────────────────────
+   GRAIN / NOISE TEXTURE OVERLAY
+   SVG feTurbulence rendered as a data URI,
+   applied via a fixed pseudo-element so it
+   tiles over the entire viewport without
+   affecting layout or interactivity.
+───────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -50%;           /* oversized so it never gaps on scroll */
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
+/* ─────────────────────────────────────────────
+   HEADINGS
+───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-cormorant);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-offwhite);
+}
+
+h1 { font-size: var(--text-7xl); letter-spacing: 0.04em; }
+h2 { font-size: var(--text-5xl); letter-spacing: 0.03em; }
+h3 { font-size: var(--text-4xl); letter-spacing: 0.02em; }
+h4 { font-size: var(--text-3xl); }
+h5 { font-size: var(--text-2xl); }
+h6 { font-size: var(--text-xl);  }
+
+/* ─────────────────────────────────────────────
+   LINKS
+───────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--ease-default);
+}
+
+a:hover {
+  color: var(--color-gold);
+}
+
+/* ─────────────────────────────────────────────
+   TEXT SELECTION
+───────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-black);
+}
+
+::-moz-selection {
+  background-color: var(--color-gold);
+  color: var(--color-black);
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM SCROLLBAR  (Webkit)
+───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-darkgray);
+  border-radius: 3px;
+  transition: background var(--ease-default);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-darkgray) var(--color-black);
+}
+
+/* ─────────────────────────────────────────────
+   HERO GOLD DRIFT ANIMATION
+───────────────────────────────────────────── */
+@keyframes gold-drift {
+  0%   { background-position: 0% 0%; }
+  25%  { background-position: 100% 50%; }
+  50%  { background-position: 50% 100%; }
+  75%  { background-position: 0% 50%; }
+  100% { background-position: 0% 0%; }
+}
+
+.hero-glow {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 50%,
+    rgba(201, 160, 53, 0.045) 0%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: gold-drift 25s ease-in-out infinite;
 }
